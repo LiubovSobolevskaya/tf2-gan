@@ -18,7 +18,7 @@ See [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) for details regarding WGAN-G
 ## Acknowledgements
 
 I used the following repositories for reference:
-* [Improved Training of Wasserstein GANs](https://github.com/igul222/improved_wgan_training)
+[Improved Training of Wasserstein GANs](https://github.com/igul222/improved_wgan_training)
 
 ## Results
 Gifs created from images saved during training:
@@ -36,4 +36,4 @@ mnist
 ![GIF](pics/wgan-gp_mnist.gif)
 
 These gifs are creates using code taken from 
-* [DCGAN Tutorial] (https://www.tensorflow.org/tutorials/generative/dcgan#create_a_gif)
+[DCGAN Tutorial](https://www.tensorflow.org/tutorials/generative/dcgan#create_a_gif)
