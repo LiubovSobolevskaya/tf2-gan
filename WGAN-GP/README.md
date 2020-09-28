@@ -36,4 +36,4 @@ mnist
 ![GIF](pics/wgan-gp_mnist.gif)
 
 These gifs are creates using code taken from 
-[DCGAN Tutorial] (https://www.tensorflow.org/tutorials/generative/dcgan#create_a_gif)
+* [DCGAN Tutorial] (https://www.tensorflow.org/tutorials/generative/dcgan#create_a_gif)
