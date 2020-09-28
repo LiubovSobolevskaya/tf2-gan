@@ -1,6 +1,7 @@
 See [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) for details regarding WGAN-GP.
 
-## Training                                                                                                                \
+## Training       
+
 ### lsun/bedroom                                                                                                                 
 ```bash                                                                                                                 
  python main.py --dataset lsun/bedroom                     
