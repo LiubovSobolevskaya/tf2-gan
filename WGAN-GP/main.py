@@ -38,7 +38,6 @@ def main(_):
     if FLAGS.dataset == 'lsun/bedroom':
         train_ds = train_ds.take(300000)
         output_channels = 3
-    
     if FLAGS.dataset == 'cifar10':
         output_channels = 3 
     if FLAGS.dataset == 'mnist':  
@@ -82,8 +81,6 @@ def main(_):
         outputs = Discriminator(FLAGS.num_filters, FLAGS.image_size, output_channels)(inputs)
         discriminator = tf.keras.Model(inputs=inputs, outputs=outputs)
 
-    seed = tf.random.normal([FLAGS.num_examples, FLAGS.latent_vector])
-
     @tf.function
     def train_gen():
 
@@ -103,14 +100,6 @@ def main(_):
             zip(gradients_of_generator, generator.trainable_variables))
 
         return tf.reduce_mean(gen_loss)
-
-    checkpoint_dir = 'training_checkpoints/'
-    checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
-    checkpoint = tf.train.Checkpoint(
-        generator_optimizer=generator_optimizer,
-        discriminator_optimizer=discriminator_optimizer,
-        generator=generator,
-        discriminator=discriminator)
 
     @tf.function
     def train_disc(images):
@@ -148,14 +137,6 @@ def main(_):
             zip(gradients_of_discriminator, discriminator.trainable_variables))
         return tf.reduce_mean(disc_loss)
 
-    checkpoint_dir = 'training_checkpoints/'
-    checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
-    checkpoint = tf.train.Checkpoint(
-        generator_optimizer=generator_optimizer,
-        discriminator_optimizer=discriminator_optimizer,
-        generator=generator,
-        discriminator=discriminator)
-
     @tf.function
     def distributed_disc_step(dist_inputs):
         per_replica_disc_loss = strategy.run(train_disc, args=[dist_inputs])
@@ -168,7 +149,7 @@ def main(_):
         return strategy.reduce(
             tf.distribute.ReduceOp.SUM, per_replica_gen_loss, axis=None)
 
-    def generate_and_save_images(model, ep, vector):
+    def save_images(model, ep, vector):
 
         predictions = tf.clip_by_value(model(vector, training=False), -1, 1)
         plt.figure(figsize=(5, 5))
@@ -185,6 +166,8 @@ def main(_):
     
     if not os.path.exists(FLAGS.save_folder):
          os.makedirs(FLAGS.save_folder)
+      
+    noise_vector = tf.random.normal([FLAGS.num_examples, FLAGS.latent_vector])
     
     for epoch in tqdm(range(FLAGS.epochs)):
         iterator = iter(train_ds)
@@ -206,31 +189,15 @@ def main(_):
                     d_loss = distributed_disc_step(data)
                     disc_loss += d_loss
                     num_batch += 1
-
-        if (epoch + 1) % 15 == 0:
-            checkpoint.save(file_prefix=checkpoint_prefix)
-        print(num_batch)
+                    
         disc_loss /= num_batch
         gen_loss /= iterations
         print("Epoch {}, gen_loss  {:.5f} \n disc_loss {:.5f}\n".format(
             epoch, gen_loss, disc_loss))
 
-        generate_and_save_images(generator, epoch, seed)
+        save_images(generator, epoch, noise_vector)
 
-    generate_and_save_images(generator, FLAGS.epochs, seed)
-
-    anim_file = 'wgan.gif'
-
-    with imageio.get_writer(anim_file, mode='I') as writer:
-        filenames = glob.glob(FLAGS.save_folder +'/image*.png')
-        filenames = sorted(filenames)
-        for filename in filenames:
-            image = imageio.imread(filename)
-            writer.append_data(image)
-        image = imageio.imread(filename)
-        writer.append_data(image)
-
-    embed.embed_file(anim_file)
+    save_images(generator, FLAGS.epochs, noise_vector)
 
 
 if __name__ == '__main__':
