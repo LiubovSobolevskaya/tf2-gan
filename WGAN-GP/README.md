@@ -32,5 +32,5 @@ cifar10
 
 mnist
 
-![GIF](pic/wgan-gp_mnist.gif)
+![GIF](pics/wgan-gp_mnist.gif)
 
