@@ -14,7 +14,7 @@ See [WGAN-GP](https://arxiv.org/pdf/1704.00028.pdf) for details regarding WGAN-G
  python main.py --dataset mnist
 ``` 
 
-#Acknowledgements
+## Acknowledgements
 
 I used the following repositories for reference:
 * [Improved Training of Wasserstein GANs](https://github.com/igul222/improved_wgan_training)
