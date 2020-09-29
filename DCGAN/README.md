@@ -18,9 +18,9 @@ See [DCGAN](https://arxiv.org/pdf/1511.06434.pdf) for details regarding DCGAN.
 ## Acknowledgements
 I used the following repositories for reference:
 
-*[Deep Convolutional Generative Adversarial Network](https://www.tensorflow.org/tutorials/generative/dcgan)
+* [Deep Convolutional Generative Adversarial Network](https://www.tensorflow.org/tutorials/generative/dcgan)
 
-*[pytorch examples](https://github.com/pytorch/examples/tree/master/dcgan)
+* [pytorch examples](https://github.com/pytorch/examples/tree/master/dcgan)
 
 ## Results
 Gif created from images saved during training.
